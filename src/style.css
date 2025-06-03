@@ -1,3 +1,52 @@
+:root {
+  --border: 1px solid black;
+}
+
 * {
-  background-color: black;
+  /* background-color: black; */
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  height: 100vh;
+}
+
+header {
+  width: 70%;
+  margin: 0 auto;
+  text-align: center;
+  padding: .5rem;
+  border: var(--border);
+  max-width: 1125px;
+}
+
+.container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr minmax(400px, auto);
+}
+
+.content,
+.sidebar,
+.current-info {
+  border: var(--border);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem .5rem;
+  /* justify-content: center; */
+}
+
+.current-info {
+  width: 50%;
+  height: 50%;
+}
+
+.current-weather{
+  width: 250px;
 }
