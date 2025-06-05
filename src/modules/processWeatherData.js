@@ -9,6 +9,9 @@ export function getWeatherData(data) {
         getDayDate(index) {
             return data.days[index].datetime;
         },
+        getNext5Days(index) {
+            return data.days.slice(index, index + 5);
+        },
         getDayTemp(index) {
             return data.days[index].temp;
         },
@@ -25,32 +28,43 @@ export function getWeatherData(data) {
             return data.days[index].sunset;
         },
         getDayCondition(index) {
-            return data.days[index].condition;
+            return data.days[index].conditions;
         },
         getDayDescription(index) {
             return data.days[index].description;
         },
         getDayIconDesc(index) {
+            
+
             return data.days[index].icon;
         },
+        getDayHours(index) {
+            return data.days[index].hours;
+        },
+        getDays() {
+            return data.days;
+        },
+        getDay(index) {
+            return data.days[index];
+        },
         // hours
-        getHourTemp(index,hour) {
+        getHourTemp(index, hour) {
             return data.days[index].hours[hour].temp;
         },
-        getHourHumidity(index,hour) {
+        getHourHumidity(index, hour) {
             return data.days[index].hours[hour].humidity;
         },
-        getHourDatetime(index,hour) {
+        getHourDatetime(index, hour) {
             return data.days[index].hours[hour].datetime;
         },
-        
-        getHourCondition(index,hour) {
+
+        getHourCondition(index, hour) {
             return data.days[index].hours[hour].condition;
         },
-        getHourDescription(index,hour) {
+        getHourDescription(index, hour) {
             return data.days[index].hours[hour].description;
         },
-        getHourIconDesc(index,hour) {
+        getHourIconDesc(index, hour) {
             return data.days[index].hours[hour].icon;
         },
     };
