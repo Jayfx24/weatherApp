@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns';
+import { format, parseISO,isToday, isTomorrow } from 'date-fns';
 import {
     selector,
     selectorAll,
@@ -7,7 +7,7 @@ import {
     svgParser,
 } from './utility';
 
-import { findIndex, getCurrentIndex } from './indexTracker';
+import { findIndex, getCurrentIndex, getActiveDate } from './indexTracker';
 import { iconsSvg } from './icons';
 import { data } from '..';
 // Create form,
@@ -33,15 +33,21 @@ components.input.setAttribute('name', 'location');
 components.btn.type = 'submit';
 
 export function renderUi() {
+    elements.currentInfo.innerHTML = '';
+    elements.sidebar.innerHTML = '';
+    elements.hourly.innerHTML = '';
     append(components.form, components.label);
     append(components.form, components.input);
     append(components.form, components.btn);
     // append(elements.container, components.form);
 
-    // getFormData();
-    components.form.addEventListener('submit', getFormData);
-    const index = getCurrentIndex();
-    addWeatherIcon(index);
+    
+    // components.form.addEventListener('submit', getFormData);
+
+    // const index = getCurrentIndex();
+    // addWeatherIcon(index);
+    const activeDate = getActiveDate();
+    addWeatherIcon(activeDate);
 }
 
 function getFormData(e) {
@@ -51,7 +57,7 @@ function getFormData(e) {
     components.form.reset();
 }
 
-function addWeatherIcon(index) {
+function addWeatherIcon(activeDate) {
     const iconsType = [
         'snow',
         'snow-showers-day',
@@ -70,39 +76,42 @@ function addWeatherIcon(index) {
         'clear-day',
         'clear-night',
     ];
-    console.log(index);
+    console.log(activeDate);
 
-    const currentIcon = data.getDayIconDesc(index);
+    const currentIcon = data.getDayIconDesc(activeDate);
     // const currentWeatherDiv = createElement('div', 'current-weather');
     const currentWeatherSvg = createElement('div', 'curr-weather-svg');
     const currentWeatherTexts = createElement('div', 'current-weather-txt');
     const currHumiditySvg = createElement('div', 'current-svg');
-    const currHumidityText = createElement('div', 'current-txt',data.getDayHumidity(index));
-
+    const currHumidityText = createElement(
+        'div',
+        'current-txt',
+        data.getDayHumidity(activeDate),
+    );
 
     const currentCondition = createElement(
         'p',
         'curr-Desc',
-        `${data.getDayCondition(index)}`,
+        `${data.getDayCondition(activeDate)}`,
     );
 
-    const date = parseISO(data.getDayDate(index));
+    const date = parseISO(data.getDayDate(activeDate));
     const currDate = createElement(
         'p',
         'curr-Date',
         `${format(date, 'EEE, MMM dd yyyy')}`,
     );
-    console.log(data.getDayDate(index));
+    console.log(data.getDayDate(activeDate));
     const currentTemp = createElement(
         'h2',
         'curr-temp',
-        `${data.getDayTemp(index)}°F`,
+        `${data.getDayTemp(activeDate)}°F`,
     );
 
     const currHumidity = createElement('span', 'curr-humidity');
 
     currentWeatherSvg.innerHTML = getSvgIcon(currentIcon);
-    currHumiditySvg.innerHTML =iconsSvg.humidity
+    currHumiditySvg.innerHTML = iconsSvg.humidity;
     console.log(currentIcon);
     // append(currHumidity, currHumiditySvg)
     // append(currHumidity,currHumidityText)
@@ -115,26 +124,26 @@ function addWeatherIcon(index) {
     append(elements.currentInfo, currentWeatherTexts);
     // append(elements.currentInfo, currentWeatherDiv);
 
-    createSliderBox(index);
-    renderCurrentWeek(index);
+    createSliderBox(activeDate);
+    renderCurrentWeek(activeDate);
 }
-// i need an index count for this
+// i need an activeDate count for this
 
-function createSliderBox(index) {
-    console.log(data.getDayHours(index));
-    data.getDayHours(index).forEach((element) => {
+function createSliderBox(activeDate) {
+    console.log(data.getDayHours(activeDate));
+    data.getDayHours(activeDate).forEach((element) => {
         const box = createElement('div', 'hourly-item');
         const svgBox = createElement('div', 'hourly-svg');
         svgBox.innerHTML = getSvgIcon(element.icon);
 
-        console.log(element.icon);
+        // console.log(element.icon);
         append(box, svgBox);
         append(elements.hourly, box);
     });
 }
 
-function renderCurrentWeek(index) {
-    const comingDays = data.getNext5Days(index);
+function renderCurrentWeek(activeDate) {
+    const comingDays = data.getNext5Days();
     console.log(comingDays);
     comingDays.forEach((element) => {
         const box = createElement('button', 'sidebar-item');
@@ -144,9 +153,10 @@ function renderCurrentWeek(index) {
         const boxDate = createElement(
             'h3',
             '',
-            `${format(date, 'EEE, MMM dd yyyy')}`,
+            `${friendlyDate(date)}`,
         );
         box.setAttribute('aria-label', element.description || 'Day item');
+        box.setAttribute('data-date', element.datetime);
 
         append(box, icon);
         append(box, boxDate);
@@ -177,14 +187,11 @@ function getSvgIcon(currentIcon) {
     }
 }
 // reminder: if icon type not found use loading icon
-// function getCurrentDay() {
-//     const date = new Date();
-//     const formattedDate = date.toISOString().split('T')[0];
-//     const days = data.getDays();
 
-//     const currDay = days.indexOf(
-//         days.find((day) => day.datetime === formattedDate),
-//     );
+// CHANGE FROM INDEX TO DATE
+function friendlyDate(date){
+    if (isToday(date)) return 'Today';
+  if (isTomorrow(date)) return 'Tomorrow';
+  return format(date, 'EEE, MMM dd yyyy')
 
-//     console.log(data.getDay(currDay));
-// }
+}

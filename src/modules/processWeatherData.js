@@ -1,3 +1,76 @@
+// export function getWeatherData(data) {
+//     return {
+//         location: data.address,
+//         fullLocation: data.resolvedAddress,
+//         timezone: data.timezone,
+//         alert: data.alert,
+//         // temp: data.temp,
+//         // days
+//         getDayDate(index) {
+//             return data.days[index].datetime;
+//         },
+//         getNext5Days(index) {
+//             return data.days.slice(index, index + 5);
+//         },
+//         getDayTemp(index) {
+//             return data.days[index].temp;
+//         },
+//         getDayHumidity(index) {
+//             return data.days[index].humidity;
+//         },
+//         getDayPreciptype(index) {
+//             return data.days[index].preciptype;
+//         },
+//         getDaySunrise(index) {
+//             return data.days[index].sunrise;
+//         },
+//         getDaySunset(index) {
+//             return data.days[index].sunset;
+//         },
+//         getDayCondition(index) {
+//             return data.days[index].conditions;
+//         },
+//         getDayDescription(index) {
+//             return data.days[index].description;
+//         },
+//         getDayIconDesc(index) {
+
+//             return data.days[index].icon;
+//         },
+//         getDayHours(index) {
+//             return data.days[index].hours;
+//         },
+//         getDays() {
+//             return data.days;
+//         },
+//         getDay(index) {
+//             return data.days[index];
+//         },
+//         // hours
+//         getHourTemp(index, hour) {
+//             return data.days[index].hours[hour].temp;
+//         },
+//         getHourHumidity(index, hour) {
+//             return data.days[index].hours[hour].humidity;
+//         },
+//         getHourDatetime(index, hour) {
+//             return data.days[index].hours[hour].datetime;
+//         },
+
+//         getHourCondition(index, hour) {
+//             return data.days[index].hours[hour].condition;
+//         },
+//         getHourDescription(index, hour) {
+//             return data.days[index].hours[hour].description;
+//         },
+//         getHourIconDesc(index, hour) {
+//             return data.days[index].hours[hour].icon;
+//         },
+//     };
+// }
+
+import { findIndex, findDateObj,today } from './indexTracker';
+
 export function getWeatherData(data) {
     return {
         location: data.address,
@@ -6,66 +79,82 @@ export function getWeatherData(data) {
         alert: data.alert,
         // temp: data.temp,
         // days
-        getDayDate(index) {
-            return data.days[index].datetime;
+        getDayDate(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.datetime : null ;
         },
-        getNext5Days(index) {
+        getNext5Days() {
+            const index = findIndex(today());
             return data.days.slice(index, index + 5);
         },
-        getDayTemp(index) {
-            return data.days[index].temp;
+        getDayTemp(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.temp : null;
         },
-        getDayHumidity(index) {
-            return data.days[index].humidity;
+        getDayHumidity(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.humidity : null;
         },
-        getDayPreciptype(index) {
-            return data.days[index].preciptype;
+        getDayPreciptype(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.preciptype : null;
         },
-        getDaySunrise(index) {
-            return data.days[index].sunrise;
+        getDaySunrise(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.sunrise : null;
         },
-        getDaySunset(index) {
-            return data.days[index].sunset;
+        getDaySunset(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.sunset : null;
         },
-        getDayCondition(index) {
-            return data.days[index].conditions;
+        getDayCondition(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.conditions : null;
         },
-        getDayDescription(index) {
-            return data.days[index].description;
+        getDayDescription(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.description : null;
         },
-        getDayIconDesc(index) {
-            
-
-            return data.days[index].icon;
+        getDayIconDesc(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.icon : null;
         },
-        getDayHours(index) {
-            return data.days[index].hours;
+        getDayHours(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.hours : null;
         },
         getDays() {
             return data.days;
         },
-        getDay(index) {
-            return data.days[index];
+        getDay(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj: null;
         },
         // hours
-        getHourTemp(index, hour) {
-            return data.days[index].hours[hour].temp;
+        getHourTemp(date, hour) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.hours[hour].temp : null;
         },
-        getHourHumidity(index, hour) {
-            return data.days[index].hours[hour].humidity;
+        getHourHumidity(date, hour) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.hours[hour].humidity : null;
         },
-        getHourDatetime(index, hour) {
-            return data.days[index].hours[hour].datetime;
+        getHourDatetime(date, hour) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.hours[hour].datetime : null;
         },
 
-        getHourCondition(index, hour) {
-            return data.days[index].hours[hour].condition;
+        getHourCondition(date, hour) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.hours[hour].condition : null;
         },
-        getHourDescription(index, hour) {
-            return data.days[index].hours[hour].description;
+        getHourDescription(date, hour) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.hours[hour].description : null;
         },
-        getHourIconDesc(index, hour) {
-            return data.days[index].hours[hour].icon;
+        getHourIconDesc(date, hour) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.hours[hour].icon : null;
         },
     };
 }
