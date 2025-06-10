@@ -6,7 +6,7 @@ export async function requestWeatherData(location) {
         const params = new URLSearchParams({
             location: location,
             key: API_KEY,
-            iconSet:icons2,
+            // iconSet:'icons2',
         });
         const response = await fetch(`${BASE_URL}?${params}`);
 
@@ -19,6 +19,6 @@ export async function requestWeatherData(location) {
         return weatherData;
     } catch (error) {
         console.error('Failed to fetch weather data:', error);
-        throw error;
+        // throw error;
     }
 }

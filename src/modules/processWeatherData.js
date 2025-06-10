@@ -1,4 +1,4 @@
-// export function getWeatherData(data) {
+// export function processData(data) {
 //     return {
 //         location: data.address,
 //         fullLocation: data.resolvedAddress,
@@ -71,7 +71,7 @@
 
 import { findIndex, findDateObj,today } from './indexTracker';
 
-export function getWeatherData(data) {
+export function processData(data) {
     return {
         location: data.address,
         fullLocation: data.resolvedAddress,
@@ -91,6 +91,10 @@ export function getWeatherData(data) {
             const dateObj = findDateObj(date)
             return dateObj ? dateObj.temp : null;
         },
+        getDayUV(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.uvindex : null;
+        },
         getDayHumidity(date) {
             const dateObj = findDateObj(date)
             return dateObj ? dateObj.humidity : null;
@@ -99,6 +103,10 @@ export function getWeatherData(data) {
             const dateObj = findDateObj(date)
             return dateObj ? dateObj.preciptype : null;
         },
+        getDayPrecip(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.precipprob : null;
+        },
         getDaySunrise(date) {
             const dateObj = findDateObj(date)
             return dateObj ? dateObj.sunrise : null;
@@ -106,6 +114,10 @@ export function getWeatherData(data) {
         getDaySunset(date) {
             const dateObj = findDateObj(date)
             return dateObj ? dateObj.sunset : null;
+        },
+        getDayWindSpeed(date) {
+            const dateObj = findDateObj(date)
+            return dateObj ? dateObj.windspeed : null;
         },
         getDayCondition(date) {
             const dateObj = findDateObj(date)

@@ -1,5 +1,5 @@
 export const selector = (s) => document.querySelector(s);
-export const selectorAll = (s) => document.querySelector(s);
+export const selectorAll = (s) => document.querySelectorAll(s);
 export const append = (parent, child) => parent.appendChild(child);
 
 export const createElement = (tag, classname = '', text = '', id = '') => {
