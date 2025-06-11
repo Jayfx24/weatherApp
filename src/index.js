@@ -4,8 +4,7 @@ import { requestWeatherData } from './modules/getWeatherApi';
 import { processData } from './modules/processWeatherData';
 import { renderUi, elements, components } from './modules/displayUI';
 import {
-    findIndex,
-    setIndex,
+    
     setActiveDate,
     today,
 } from './modules/indexTracker';
@@ -62,8 +61,12 @@ app();
 // ADD FORM ERRORS DONE
 // UPDATE WITH OTHER ELEMENTS E.G HUMIDITY ETC DONE
 // FIGURE OUT SEARCH PARAMS LOCATION DONE
-// IMPROVE UI
-// SHOW FORM ERROR
+// IMPROVE UI DONE
+// SHOW FORM ERROR DONE
+// SET DEFINED WIDTH TO HOUR CARD
+// ADD BUTTON FOR CHANGING DEGREE
+// IMPROVE UI AND AND EFFECTS
+
 // FIGURE OUT USER LOCAL NETWORK API AND ADD WAIT LOADING SCREEN
 
 function showFormError() {}

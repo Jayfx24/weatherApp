@@ -1,4 +1,4 @@
-import { format, parseISO, isToday, isTomorrow } from 'date-fns';
+import { format, parseISO, isToday, isTomorrow,differenceInMinutes } from 'date-fns';
 import {
     selector,
     selectorAll,
@@ -23,6 +23,8 @@ export const components = {
     form: createElement('form'),
     label: createElement('label', '', 'Enter Location', ''),
     input: createElement('input', '', '', 'location'),
+    inputWrapper: createElement('div','input-wrapper'),
+
     btn: createElement('button', '', 'Check Location'),
     spanError: createElement('span', '', '', 'locError'),
     rightSvg: createElement('div', 'right-svg'),
@@ -44,26 +46,28 @@ export const elements = {
 components.label.setAttribute('for', 'location');
 components.input.setAttribute('name', 'location');
 components.input.setAttribute('placeholder', 'Search location');
-components.btn.type = 'submit';
 
 let indexCount = 0;
 
 export function renderUi() {
+    
     elements.currentInfo.innerHTML = '';
     elements.navPeriod.innerHTML = '';
     elements.hourly.innerHTML = '';
     elements.otherInfo.innerHTML = '';
 
-    // append(components.form, components.label);
-    append(components.form, components.input);
-    append(components.form, components.btn);
+    const inputSvg = createElement('button','input-svg')
+    inputSvg.innerHTML = iconsSvg.search
+    inputSvg.type = 'submit';
+
+    append(components.inputWrapper, inputSvg);
+    append(components.inputWrapper, components.input);
+    append(components.form, components.inputWrapper);
+    // append(components.form, components.btn);
     append(components.form, components.spanError);
     append(elements.formDiv, components.form);
 
-    // components.form.addEventListener('submit', getFormData);
-
-    // const index = getCurrentIndex();
-    // addWeatherIcon(index);
+    
     const activeDate = getActiveDate();
     addWeatherIcon(activeDate);
     otherWeatherEle(activeDate);
@@ -133,25 +137,58 @@ function addWeatherIcon(activeDate) {
     append(elements.currentInfo, currentWeatherTexts);
     // append(elements.currentInfo, currentWeatherDiv);
 
-    createSliderBox(activeDate);
+    renderHourly(activeDate);
     renderCurrentWeek();
 }
 // i need an activeDate count for this
 
-function createSliderBox(activeDate) {
+function renderHourly(activeDate) {
     const data = dataManager.getData();
     const hours = data.getDayHours(activeDate);
     console.log(hours);
     hours.forEach((element) => {
-        const box = createElement('div', 'hourly-item');
-        const boxText = createElement('p', 'hourly-item-text');
-        const svgBox = createElement('div', 'hourly-svg');
-        svgBox.innerHTML = getSvgIcon(element.icon);
-        boxText.textContent = `${data.getHourDatetime(activeDate, hours.indexOf(element))}`;
+        const currTimeEpoch = Math.floor(Date.now() / 1000);
+        const timeEpoch = element.datetimeEpoch + 3600
+        if (currTimeEpoch > timeEpoch ) return
 
-        // console.log(element.icon);
+        const box = createElement('div', 'hourly-card');
+        const heading = createElement('div', 'hourly-heading');
+        const time = createElement('h3', 'hourly-time');
+        const svgBox = createElement('div', 'hourly-svg');
+        const degree = createElement('p', 'hourly-degree');
+        const feels = createElement('p', 'hourly-feels');
+        const condition = createElement('p', 'hourly-condition');
+        const precip = createElement('p', 'hourly-precip');
+
+        const hourIndex = hours.indexOf(element)
+        const hour = data.getHourDatetime(activeDate,hourIndex)
+        
+        const datetime = new Date(`${activeDate}T${hour}`)
+
+        svgBox.innerHTML = getSvgIcon(element.icon);
+        degree.textContent = element.temp;
+        feels.textContent = `Feels like ${element.feelslike}`;
+        condition.textContent = element.conditions;
+        time.textContent = formattedHour((element.datetimeEpoch * 1000),datetime);
+        precip.textContent = `${Math.round(element.precipprob)}% chance of rain`
+
+        time.classList.add('hour-item')
+        svgBox.classList.add('hour-item')
+        degree.classList.add('hour-item')
+        feels.classList.add('hour-item')
+        condition.classList.add('hour-item')
+        precip.classList.add('hour-item')
+        
+
+        append(box, time);
         append(box, svgBox);
-        append(box, boxText);
+        // append(box, heading);
+        append(box, degree);
+        append(box, feels);
+        append(box, condition);
+        append(box, precip);
+
+
         append(elements.hourly, box);
     });
 
@@ -228,7 +265,7 @@ function otherWeatherEle(date) {
 
     const precipitation = createElement('div', 'other-item');
     const precipitationSvg = createElement('div', 'per-svg');
-    const precipitationText = createElement('p', 'per-text');
+    const precipitationText = createElement('p', 'item-name');
     const precipitationDescText = createElement(
         'p',
         'per-text',
@@ -237,27 +274,27 @@ function otherWeatherEle(date) {
 
     const uvIndex = createElement('div', 'other-item');
     const uvIndexSvg = createElement('div', 'uv-svg');
-    const uvIndexText = createElement('p', 'uv-text');
+    const uvIndexText = createElement('p', 'item-name');
     const uvIndexDescText = createElement('p', 'per-text', 'uvIndex');
 
     const sunrise = createElement('div', 'other-item');
     const sunriseSvg = createElement('div', 'sunrise-svg');
-    const sunriseText = createElement('p', 'sunrise-text');
+    const sunriseText = createElement('p', 'item-name');
     const sunriseDescText = createElement('p', 'per-text', 'sunrise');
 
     const sunset = createElement('div', 'other-item');
     const sunsetSvg = createElement('div', 'sunset-svg');
-    const sunsetText = createElement('p', 'sunset-text');
+    const sunsetText = createElement('p', 'item-name');
     const sunsetDescText = createElement('p', 'per-text', 'sunset');
 
     const humidity = createElement('div', 'other-item');
     const humiditySvg = createElement('div', 'humidity-svg');
-    const humidityText = createElement('p', 'humidity-text');
+    const humidityText = createElement('p', 'item-name');
     const humidityDescText = createElement('p', 'per-text', 'humidity');
 
     const windSpeed = createElement('div', 'other-item');
     const windSpeedSvg = createElement('div', 'wind-svg');
-    const windSpeedText = createElement('p', 'wind-text');
+    const windSpeedText = createElement('p', 'item-name');
     const windSpeedDescText = createElement('p', 'per-text', 'windSpeed');
 
     precipitationSvg.innerHTML = iconsSvg.precip;
@@ -311,22 +348,18 @@ function otherWeatherEle(date) {
     append(elements.otherInfo, uvIndex);
 }
 
-function slideCircle() {
-    const hours = dataManager.getDayHours();
+const formattedHour = (dateToFormat,hour) => {
+  const now = new Date();
+  const diff = differenceInMinutes(now, dateToFormat);
 
-    hours.forEach((hour) => {
-        const slideDot = createElement('button', 'slide-dots');
-
-        slideDot.setAttribute('role', 'tab');
-        slideDot.setAttribute('aria-label', `Slide ${hours.indexOf(hour) + 1}`);
-        slideDot.setAttribute('aria-selected', 'false');
-
-        append(elements.slideNav, slideDot);
-    });
-}
+  if (diff >= 0 && diff <= 60) {
+    return 'now';
+  }
+  return format(hour, 'h a');  
+};
 
 function swipeRight() {
-    const hours = document.querySelectorAll('.hourly-item');
+    const hours = document.querySelectorAll('.hourly-card');
     const currHour = hours[indexCount];
     // currHour.className = 'active';
 
@@ -349,7 +382,7 @@ function swipeLeft() {
         indexCount = 0;
         return;
     }
-    const hours = document.querySelectorAll('.hourly-item');
+    const hours = document.querySelectorAll('.hourly-card');
     const currHour = hours[indexCount];
     currHour.classList.remove('hide');
 }
