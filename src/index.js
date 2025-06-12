@@ -1,5 +1,5 @@
 import './style.css';
-import testData from './test2.json';
+import testData from './test.json';
 import { requestWeatherData } from './modules/getWeatherApi';
 import { processData } from './modules/processWeatherData';
 import { renderUi, elements, components } from './modules/displayUI';
@@ -16,6 +16,7 @@ dataManager.setData(processData(testData));
 function app() {
     setActiveDate(today());
     renderUi();
+
 
     // elements.navPeriod.addEventListener('mouseover',renderSelectedBtn);
     elements.navPeriod.addEventListener('click', renderSelectedBtn);
@@ -41,7 +42,7 @@ async function getFormData(e) {
     const requestData = await requestWeatherData(loc);
     if (!requestData) {
         components.spanError.textContent = 
-            `${loc} is not on the database or does not exists! `;
+            `Error: ${loc.toUpperCase()} not found `;
         
         return;
     }
@@ -64,9 +65,9 @@ app();
 // IMPROVE UI DONE
 // SHOW FORM ERROR DONE
 // SET DEFINED WIDTH TO HOUR CARD
-// ADD BUTTON FOR CHANGING DEGREE
-// IMPROVE UI AND AND EFFECTS
+// IMPROVE UI AND AND EFFECTS done
 
+// ADD BUTTON FOR CHANGING DEGREE
 // FIGURE OUT USER LOCAL NETWORK API AND ADD WAIT LOADING SCREEN
 
 function showFormError() {}

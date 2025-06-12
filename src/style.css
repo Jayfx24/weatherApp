@@ -4,6 +4,10 @@
   --font-xx: 1.5rem;
   --font-xxx: 2.5rem;
   --color: white;
+  --bg: rgba(0, 0, 0, 0.1);
+  --text-color: white;
+  --shadow-color: white;
+  --accent: blue;
 }
 
 * {
@@ -23,26 +27,48 @@ body {
 body {
   /* height: 100%; */
   background-color: #0f172a;
-  /* --color:#fff */
-  color: var(--color);
+  --color: black;
+  color: var(--text-color);
   /* background: #020024; */
-  /* background: linear-gradient(243deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%); */
+  /* background: linear-gradient(to bottom, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%); */
   display: flex;
   /* background-color:  rgba(0, 212, 255, 1); */
   flex-direction: column;
+  
+  /* background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1511747779856-fd751a79aa22?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); */
+  background-size: cover;
+  /* Ensures it covers the whole screen */
+  background-position: center;
+  /* Keeps it centered */
+  background-repeat: no-repeat;
+  /* Prevents tiling */
+  background-attachment: fixed;
+  /* background-image: url('https://images.unsplash.com/photo-1541734091135-d4a3c6235ed8?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); */
+
 }
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3); /* adjustable */
+  z-index: -1;
+}
+
+
+
+
 
 header {
   display: flex;
   text-align: center;
   padding: .825rem 3rem;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 30px var(--bg);
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 2rem;
-    /* border: var(--border); */
-    /* max-width: 1125px; */
+  /* border: var(--border); */
+  /* max-width: 1125px; */
 }
 
 .container {
@@ -77,6 +103,7 @@ header {
   flex-direction: column;
   /* justify-content: center; */
   gap: .25rem;
+  padding-inline: 1rem;
 
 }
 
@@ -108,16 +135,12 @@ header {
   flex: 1
 }
 
-.curr-weather-svg {
-
-  
- 
-}
+.curr-weather-svg {}
 
 .curr-weather-svg svg {
   max-width: 100%;
   height: auto;
-  display:block;
+  display: block;
 
 }
 
@@ -129,6 +152,8 @@ header {
   font-size: var(--font-xx);
   font-weight: 400;
   /* text-align: end; */
+  color: var(--text-color);
+
 }
 
 .curr-temp {
@@ -150,30 +175,55 @@ header {
 } */
 
 .hourly {
-  width: 70%;
-  height: calc(fit-content + .2rem);
+
   display: flex;
-  overflow-x: hidden;
+  flex-wrap:wrap;
+  /* overflow-x: hidden; */
   width: 100%;
   /* flex: 1; */
   gap: 0.875rem;
   margin-top: 2rem;
-  /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
   position: relative;
+  padding-block: 1rem;
 }
 
 .hourly-card {
   display: grid;
   gap: 0.5rem;
-  /* width:200px; */
+  width: 23%;
+  min-width: 120px;
   height: 100%;
   flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--bg);
+  background-color: var(--bg);
   padding: 1rem;
   text-align: center;
   text-transform: capitalize;
-  border-radius: 25px;
+  justify-content: center;
+  border-radius: 1.4rem;
+  /* background-color: rgba(255, 255, 255, 0.2); */
+  /* box-shadow: 3px 4px 3px rgba(255, 255, 255, .5); */
+  /* backdrop-filter: blur(10px); */
+  box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* background: linear-gradient(to bottom, #fceabb, #f8b500);
+  background: linear-gradient(to bottom, #d3cce3, #e9e4f0); */
+  /* background: linear-gradient(to bottom, #bdc3c7, #2c3e50); */
+/* background: linear-gradient(to bottom, #4b79a1, #283e51); */
+/* background: linear-gradient(to top, #e6dada, #274046); */
 
+
+
+}
+
+.hourly-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .hour-item {
@@ -184,15 +234,15 @@ header {
 
 .hourly-svg {
   display: block;
-  width: 100%;
-  height: auto;
+  width: 100px;
+  /* height: auto; */
 }
 
 .other-info {
   /* display: flex;
   flex-wrap: wrap; */
-  display:grid;
-  grid-template-columns: repeat(auto-fit,100px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 100px);
   gap: 1rem;
   justify-content: space-between;
 }
@@ -203,10 +253,29 @@ header {
 
 .other-item {
   display: grid;
-  width:100%;
-  text-align: center;
-  /* justify-content: center; */
+  width: 100%;
+  place-items: center;
+  padding: 1rem .5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.2);
 
+
+}
+
+.other-item:hover {
+  transform: translateY(-4px);
+}
+
+.item-name {
+  /* font-weight: 600; */
+  /* color:red; */
+  text-transform: capitalize;
+  /* letter-spacing: 1px; */
 }
 
 form {
@@ -219,12 +288,18 @@ header>* {
 }
 
 form {
-  display: flex;
+  display: grid;
   gap: 0.875rem;
 }
+.error{
+  color:red;
+  /* font-weight: 600; */
+  text-align: start;
+  font-size: 0.8rem;
+}
 
-.input-wrapper{
-   position: relative;
+.input-wrapper {
+  position: relative;
   display: inline-flex;
 }
 
@@ -244,11 +319,11 @@ input:active {
   outline: 3px solid black;
 }
 
-.input-svg{
+.input-svg {
   background-color: transparent;
   outline: none;
   border: none;
-    border-left: 1px solid gray;
+  border-left: 1px solid gray;
   position: absolute;
   padding-inline: 0.5rem;
   top: 0.75rem;
@@ -257,14 +332,15 @@ input:active {
 }
 
 .search-svg {
-  stroke:greenyellow;
+  stroke: greenyellow;
   cursor: pointer;
 
   width: 1.25rem;
   height: 1.25rem;
- 
+
   /* fill: #888; */
 }
+
 .hide {
   border: 8px solid green;
   display: none;
@@ -295,6 +371,8 @@ input:active {
   gap: 1rem;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  /* background: rgba(255, 255, 255, 0.05); */
+
 }
 
 .nav-item {
@@ -307,17 +385,44 @@ input:active {
   align-items: center;
   height: fit-content;
   padding-block: .5rem;
+  font-size: 1rem;
+  color: var(--text-color);
+
+
 }
 
 .nav-item svg {
-  width: 25px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .nav-item:hover {
-  border-bottom: 1px solid var(--color);
+  border-bottom: 2px solid navajowhite;
+
 
 }
 
 .active {
   border-bottom: 2px solid navajowhite;
+  /* border-radius: 4px; */
+
 }
+
+/* Photo by <a href="https://unsplash.com/@gregjeanneau?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Gregoire Jeanneau</a> on <a href="https://unsplash.com/photos/starry-night-wallpaper-9sxeKzuCVoE?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+       */
+
+/* Photo by <a href="https://unsplash.com/@iamthedave?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Dave Hoefler</a> on <a href="https://unsplash.com/photos/blue-ocean-photography-ELXbHhzVFO0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+       */
+
+/* Photo by <a href="https://unsplash.com/@sebbas?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Sebastian Barschkis</a> on <a href="https://unsplash.com/photos/blue-sky-sB3EGMv-JvA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+       */
+/* Photo by <a href="https://unsplash.com/@dannyeve?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Daoudi Aissa</a> on <a href="https://unsplash.com/photos/cumulus-clouds-Pe1Ol9oLc4o?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+       */
+/* Photo by <a href="https://unsplash.com/@mahkeo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Khamkéo</a> on <a href="https://unsplash.com/photos/trees-with-wind-photo-WtwSsqwYlA0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+       */
+/* Photo by <a href="https://unsplash.com/@pueblovista?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Paul Pastourmatzis</a> on <a href="https://unsplash.com/photos/silhouette-of-trees-covered-by-fog-KT3WlrL_bsg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+       */
+/* Photo by <a href="https://unsplash.com/@r_shayesrehpour?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">reza shayestehpour</a> on <a href="https://unsplash.com/photos/grayscale-photography-of-raindrops-Nw_D8v79PM4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+       */
+/* Photo by <a href="https://unsplash.com/@inayali?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Ali Inay</a> on <a href="https://unsplash.com/photos/dirt-road-cover-by-snow-yNaGxHqjOuw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+       */
