@@ -6,24 +6,27 @@
         <title>Weather App</title>
     </head>
     <body>
+        <div class="loading-overlay">
+            <div class="spinner"> </div>
+        </div>
         <header>
             <div class="title">
                 <h1>WeatherApp</h1>
             </div>
-            <div class="form"></div>
+            <div class="side-header">
+                <div class="form"></div>
+               <button  class="side-btn">°C</button>
+            </div>
         </header>
         <main class="container">
             <div class="content">
                 <div class="wrapper">
                     <nav class="nav-period"></nav>
-                    <div class="current-info">
-                    </div>
+                    <div class="current-info"></div>
                     <div class="other-info"></div>
                     <div class="hourly"></div>
-                    <nav class="slide-nav">
-                    </nav>
+                    <nav class="slide-nav"></nav>
                 </div>
-
             </div>
             <aside class="sidebar"></aside>
         </main>

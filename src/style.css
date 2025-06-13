@@ -25,33 +25,34 @@ body {
 }
 
 body {
-  /* height: 100%; */
   background-color: #0f172a;
   --color: black;
   color: var(--text-color);
-  /* background: #020024; */
-  /* background: linear-gradient(to bottom, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%); */
+
   display: flex;
-  /* background-color:  rgba(0, 212, 255, 1); */
+
   flex-direction: column;
-  
-  /* background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1511747779856-fd751a79aa22?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); */
+
   background-size: cover;
-  /* Ensures it covers the whole screen */
+
   background-position: center;
-  /* Keeps it centered */
+
   background-repeat: no-repeat;
-  /* Prevents tiling */
-  background-attachment: fixed;
-  /* background-image: url('https://images.unsplash.com/photo-1541734091135-d4a3c6235ed8?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); */
+
+  /* background-image: url('./assets/images/rain.jpg'); */
+  background-attachment:fixed ;
+  min-height: 100%;
 
 }
+
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3); /* adjustable */
+  background: rgba(0, 0, 0, 0.3);
+  /* adjustable */
   z-index: -1;
+
 }
 
 
@@ -62,7 +63,7 @@ header {
   display: flex;
   text-align: center;
   padding: .825rem 3rem;
-  box-shadow: 0 4px 30px var(--bg);
+  /* box-shadow: 0 4px 30px var(--bg); */
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -70,7 +71,15 @@ header {
   /* border: var(--border); */
   /* max-width: 1125px; */
 }
+.side-header{
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap ;
+  align-items: center;
+  /* border: 1px solid; */
+  padding: .25rem;
 
+}
 .container {
   flex: 1;
   display: flex;
@@ -96,14 +105,18 @@ header {
 }
 
 .wrapper {
-  max-width: 725px;
+  max-width: 770px;
 
   margin-inline: auto;
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
-  gap: .25rem;
-  padding-inline: 1rem;
+  gap: .5rem;
+  padding: 1rem 2rem;
+  /* border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 4px 4px 30px rgba(255, 255, 255, 0.2);
+  border-radius: 10px; */
+
 
 }
 
@@ -118,12 +131,13 @@ header {
   width: 100%;
   /* max-height: 50%; */
   /* background-color:  #dbeafe; */
-  background-color: transparent;
-  /* border: 1px solid rgba(255, 255, 255, 0.3); */
-  color: var(--color);
-  /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+  /* background-color: transparent; */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  box-shadow: 4px 4px 30px rgba(255, 255, 255, 0.4);
   /* align-items: center; */
   padding: .5rem 0;
+  border-radius: 10px;
 
 }
 
@@ -176,13 +190,14 @@ header {
 
 .hourly {
 
-  display: flex;
-  flex-wrap:wrap;
+  display: grid;
+  /* flex-wrap: wrap; */
+  grid-template-columns: repeat(auto-fit, minmax(170px,0.5fr));
   /* overflow-x: hidden; */
   width: 100%;
   /* flex: 1; */
-  gap: 0.875rem;
-  margin-top: 2rem;
+  gap: 0.5rem;
+  /* margin-top: 2rem; */
   position: relative;
   padding-block: 1rem;
 }
@@ -190,7 +205,7 @@ header {
 .hourly-card {
   display: grid;
   gap: 0.5rem;
-  width: 23%;
+  width:100%;
   min-width: 120px;
   height: 100%;
   flex-shrink: 0;
@@ -212,8 +227,8 @@ header {
   /* background: linear-gradient(to bottom, #fceabb, #f8b500);
   background: linear-gradient(to bottom, #d3cce3, #e9e4f0); */
   /* background: linear-gradient(to bottom, #bdc3c7, #2c3e50); */
-/* background: linear-gradient(to bottom, #4b79a1, #283e51); */
-/* background: linear-gradient(to top, #e6dada, #274046); */
+  /* background: linear-gradient(to bottom, #4b79a1, #283e51); */
+  /* background: linear-gradient(to top, #e6dada, #274046); */
 
 
 
@@ -242,8 +257,8 @@ header {
   /* display: flex;
   flex-wrap: wrap; */
   display: grid;
-  grid-template-columns: repeat(auto-fit, 100px);
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit,minmax(100px, 14%));
+  gap: .5rem;
   justify-content: space-between;
 }
 
@@ -289,10 +304,11 @@ header>* {
 
 form {
   display: grid;
-  gap: 0.875rem;
+  /* gap: 0.875rem; */
 }
-.error{
-  color:red;
+
+.error {
+  color: red;
   /* font-weight: 600; */
   text-align: start;
   font-size: 0.8rem;
@@ -341,10 +357,6 @@ input:active {
   /* fill: #888; */
 }
 
-.hide {
-  border: 8px solid green;
-  display: none;
-}
 
 .right-svg,
 .left-svg {
@@ -406,6 +418,61 @@ input:active {
   border-bottom: 2px solid navajowhite;
   /* border-radius: 4px; */
 
+}
+
+.side-btn{
+  padding: 1rem;
+  background-color: transparent;
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  font-weight: 800;
+  border:1px solid white;
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+
+}
+
+.side-btn:hover{
+  transform: translateY(-2px);
+  /* background-color: hsl(123, 71%, 45%); */
+  border: 1px solid hsl(123, 71%, 45%);
+  outline: 1px solid hsl(123, 71%, 45%);
+}
+
+.loading-overlay{
+  width:100%;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  border: 1px solid black;
+  position: fixed;             
+  top: 0;
+  left: 0;
+   z-index: 9999; 
+    background-color: rgba(0, 0, 0, 0.8);  
+  
+}
+
+
+
+.spinner{
+  width: 100px;
+  height: 100px;
+  border: 10px solid hsl(0, 0%, 80%);
+  border-radius: 50%;
+  border-top-color: green;
+  border-left-color: green;
+    animation: spin 1s linear infinite;
+
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.hide {
+  display: none;
 }
 
 /* Photo by <a href="https://unsplash.com/@gregjeanneau?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Gregoire Jeanneau</a> on <a href="https://unsplash.com/photos/starry-night-wallpaper-9sxeKzuCVoE?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>

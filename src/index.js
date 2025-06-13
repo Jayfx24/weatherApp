@@ -2,24 +2,39 @@ import './style.css';
 import testData from './test.json';
 import { requestWeatherData } from './modules/getWeatherApi';
 import { processData } from './modules/processWeatherData';
-import { renderUi, elements, components } from './modules/displayUI';
 import {
-    
-    setActiveDate,
-    today,
-} from './modules/indexTracker';
+    renderUi,
+    renderDayInfo,
+    renderHourly,
+    elements,
+    components,
+} from './modules/displayUI';
+import { setActiveDate, today } from './modules/indexTracker';
 import { dataManager } from './modules/dataManager';
+import { tempCategory, showLoading, hideLoading } from './modules/utility';
+import { getUserServerLocation } from './modules/defaultLocation';
 
-// export let data = processData(testData);
 dataManager.setData(processData(testData));
 
-function app() {
+async function app() {
+    showLoading();
     setActiveDate(today());
+    // const ipLoc = await getUserServerLocation();
+    // const requestLocation = ipLoc ? `${ipLoc.city}, ${ipLoc.country}`: "New York";
+
+    // const requestData = await requestWeatherData(requestLocation);
+    // const data = processData(requestData);
+
+    // console.log(requestData);
+    // if (data) dataManager.setData(data);
     renderUi();
+    
+    setTimeout(hideLoading, 500);
 
 
     // elements.navPeriod.addEventListener('mouseover',renderSelectedBtn);
     elements.navPeriod.addEventListener('click', renderSelectedBtn);
+    elements.sideHeader.addEventListener('click', changeTempType);
     components.form.addEventListener('submit', getFormData);
 }
 
@@ -30,20 +45,18 @@ function renderSelectedBtn(e) {
     const id = target.getAttribute('data-date');
     setActiveDate(id);
     console.log(`changing Active Date to ${id}`);
-    
+
     renderUi();
-    
 }
 async function getFormData(e) {
     e.preventDefault();
     const formData = new FormData(components.form);
     const loc = formData.get('location');
-
+    showLoading();
     const requestData = await requestWeatherData(loc);
     if (!requestData) {
-        components.spanError.textContent = 
-            `Error: ${loc.toUpperCase()} not found `;
-        
+        components.spanError.textContent = `Error: ${loc.toUpperCase()} not found `;
+        hideLoading();
         return;
     }
     components.spanError.textContent = '';
@@ -55,9 +68,27 @@ async function getFormData(e) {
     components.form.reset();
     setActiveDate(today());
     renderUi();
+    hideLoading();
 }
 // enable searching and display of user input
 app();
+
+function changeTempType(e) {
+    const target = e.target.closest('button');
+
+    if (!target) return;
+    document
+        .querySelectorAll('.side-btn')
+        .forEach((el) => el.classList.remove('active-temp'));
+    target.classList.add('active-temp');
+    tempCategory.change();
+    const value = target.textContent === '°F' ? '°C' : '°F';
+    target.textContent = value;
+    renderDayInfo();
+    renderHourly();
+}
+
+
 // FIX ERROR FOR INVALID API REQUEST DONE
 // ADD FORM ERRORS DONE
 // UPDATE WITH OTHER ELEMENTS E.G HUMIDITY ETC DONE
@@ -68,6 +99,5 @@ app();
 // IMPROVE UI AND AND EFFECTS done
 
 // ADD BUTTON FOR CHANGING DEGREE
+// style button and add loading screen
 // FIGURE OUT USER LOCAL NETWORK API AND ADD WAIT LOADING SCREEN
-
-function showFormError() {}

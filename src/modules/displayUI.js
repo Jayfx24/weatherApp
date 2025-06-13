@@ -11,15 +11,11 @@ import {
     createElement,
     append,
     svgParser,
+    showLoading,
+    hideLoading,
 } from './utility';
 
-import {
-    findIndex,
-    getCurrentIndex,
-    getActiveDate,
-    setActiveDate,
-    today,
-} from './indexTracker';
+import { getActiveDate } from './indexTracker';
 import { iconsSvg } from './icons';
 
 import { dataManager } from './dataManager';
@@ -35,6 +31,8 @@ export const components = {
     spanError: createElement('span', 'error', '', 'locError'),
     rightSvg: createElement('div', 'right-svg'),
     leftSvg: createElement('div', 'left-svg'),
+    inputSvg: createElement('button', 'input-svg'),
+    changeTemp: createElement('div', 'change-temp'),
 };
 
 export const elements = {
@@ -47,8 +45,12 @@ export const elements = {
     otherInfo: selector('.other-info'),
     slideNav: selector('slide-nav'),
     navPeriod: selector('.nav-period'),
+    sideHeader: selector('.side-header'),
 };
 
+// components.changeTemp.innerHTML = `<button>°C</button> <button>°F</button>  `
+components.inputSvg.innerHTML = iconsSvg.search;
+components.inputSvg.type = 'submit';
 components.label.setAttribute('for', 'location');
 components.input.setAttribute('name', 'location');
 components.input.setAttribute('placeholder', 'Search location');
@@ -56,36 +58,32 @@ components.input.setAttribute('placeholder', 'Search location');
 let indexCount = 0;
 let startTimer;
 export function renderUi() {
-    elements.currentInfo.innerHTML = '';
-    elements.navPeriod.innerHTML = '';
-    elements.hourly.innerHTML = '';
-    elements.otherInfo.innerHTML = '';
-
-    const inputSvg = createElement('button', 'input-svg');
-    inputSvg.innerHTML = iconsSvg.search;
-    inputSvg.type = 'submit';
-
-    append(components.inputWrapper, inputSvg);
+    const activeDate = getActiveDate();
+    const data = dataManager.getData();
+    const currentIcon = data.getDayIconDesc(activeDate);
+    getBgImage(currentIcon).then((imgUrl) => {
+        document.body.style.backgroundImage = `url(${imgUrl})`;
+    });
+    append(components.inputWrapper, components.inputSvg);
     append(components.inputWrapper, components.input);
     append(components.form, components.inputWrapper);
     // append(components.form, components.btn);
     append(components.form, components.spanError);
     append(elements.formDiv, components.form);
 
-    const activeDate = getActiveDate();
-    addWeatherIcon(activeDate);
-    otherWeatherEle(activeDate);
+    renderDayInfo();
+    renderHourly();
+    otherWeatherEle();
+    renderCurrentWeek();
+    // hideLoading()
 
-    selectorAll('.nav-item').forEach((button) => {
-        if (button.getAttribute('data-date') === getActiveDate()) {
-            button.classList.add('active');
-        }
-    });
     // resetTimer();
 }
 
-function addWeatherIcon(activeDate) {
-    console.log(activeDate);
+export function renderDayInfo() {
+    elements.currentInfo.innerHTML = '';
+    const activeDate = getActiveDate();
+
     const data = dataManager.getData();
 
     const currentIcon = data.getDayIconDesc(activeDate);
@@ -93,11 +91,11 @@ function addWeatherIcon(activeDate) {
     const currentWeatherSvg = createElement('div', 'curr-weather-svg');
     const currentWeatherTexts = createElement('div', 'current-weather-txt');
     const currHumiditySvg = createElement('div', 'current-svg');
-    const currHumidityText = createElement(
-        'div',
-        'current-txt',
-        data.getDayHumidity(activeDate),
-    );
+    // const currHumidityText = createElement(
+    //     'div',
+    //     'current-txt',
+    //     data.getDayHumidity(activeDate),
+    // );
 
     const currentCondition = createElement(
         'p',
@@ -111,11 +109,11 @@ function addWeatherIcon(activeDate) {
         'curr-Date',
         `${format(date, 'EEE, MMM dd yyyy')}`,
     );
-    console.log(data.getDayDate(activeDate));
+    // console.log(data.getDayDate(activeDate));
     const currentTemp = createElement(
         'h2',
         'curr-temp',
-        `${data.getDayTemp(activeDate)}°F`,
+        `${data.getDayTemp(activeDate)}`,
     );
 
     const currLocation = createElement(
@@ -127,35 +125,31 @@ function addWeatherIcon(activeDate) {
     const currHumidity = createElement('span', 'curr-humidity');
 
     currentWeatherSvg.innerHTML = getSvgIcon(currentIcon);
-    getBgImage(currentIcon).then((imgUrl) => {
-        document.body.style.backgroundImage = `url(${imgUrl})`;
-    });
-    
 
     currHumiditySvg.innerHTML = iconsSvg.humidity;
-    console.log(currentIcon);
+    // console.log(currentIcon);
     // append(currHumidity, currHumiditySvg)
     // append(currHumidity,currHumidityText)
-    append(currentWeatherTexts, currLocation);
 
+    append(elements.currentInfo, currentWeatherSvg);
+    append(elements.currentInfo, currentWeatherTexts);
+    append(currentWeatherTexts, currLocation);
     append(currentWeatherTexts, currDate);
     append(currentWeatherTexts, currentTemp);
     append(currentWeatherTexts, currentCondition);
     append(currentWeatherTexts, currHumidity);
-    append(currentWeatherTexts, currentCondition);
-    append(elements.currentInfo, currentWeatherSvg);
-    append(elements.currentInfo, currentWeatherTexts);
+    // append(currentWeatherTexts, currentCondition);
     // append(elements.currentInfo, currentWeatherDiv);
-
-    renderHourly(activeDate);
-    renderCurrentWeek();
 }
 // i need an activeDate count for this
 
-function renderHourly(activeDate) {
+export function renderHourly() {
+    elements.hourly.innerHTML = '';
+    const activeDate = getActiveDate();
+
     const data = dataManager.getData();
     const hours = data.getDayHours(activeDate);
-    console.log(hours);
+    // console.log(hours);
     hours.forEach((element) => {
         const currTimeEpoch = Math.floor(Date.now() / 1000);
         const timeEpoch = element.datetimeEpoch + 3600;
@@ -176,8 +170,8 @@ function renderHourly(activeDate) {
         const datetime = new Date(`${activeDate}T${hour}`);
 
         svgBox.innerHTML = getSvgIcon(element.icon);
-        console.log(element);
-        degree.textContent = element.temp;
+        // console.log(element);
+        degree.textContent = data.getHourTemp(activeDate, hourIndex);
         feels.textContent = `Feels like ${element.feelslike}`;
         condition.textContent = element.conditions;
         time.textContent = formattedHour(
@@ -223,22 +217,27 @@ function renderHourly(activeDate) {
 }
 
 function renderCurrentWeek() {
+    elements.navPeriod.innerHTML = '';
+
     const data = dataManager.getData();
     const comingDays = data.getNext5Days();
-    console.log(comingDays);
+
     comingDays.forEach((element) => {
-        const box = createElement('button', 'nav-item');
-        // const box = createElement('button', 'sidebar-item');
+        const button = createElement('button', 'nav-item');
+
         const icon = svgParser(getSvgIcon(element.icon));
         const date = parseISO(element.datetime);
-        // console.log(element.icon);
-        const boxDate = createElement('h3', '', `${friendlyDate(date)}`);
-        box.setAttribute('aria-label', element.description || 'Day item');
-        box.setAttribute('data-date', element.datetime);
 
-        append(box, icon);
-        append(box, boxDate);
-        append(elements.navPeriod, box);
+        const buttonDate = createElement('h3', '', `${friendlyDate(date)}`);
+        button.setAttribute('aria-label', element.description || 'Day item');
+        button.setAttribute('data-date', element.datetime);
+
+        if (button.getAttribute('data-date') === getActiveDate()) {
+            button.classList.add('active');
+        }
+        append(button, icon);
+        append(button, buttonDate);
+        append(elements.navPeriod, button);
         indexCount = 0;
     });
 }
@@ -300,7 +299,10 @@ function friendlyDate(date) {
     return format(date, 'EEE, MMM dd');
 }
 
-function otherWeatherEle(date) {
+function otherWeatherEle() {
+    elements.otherInfo.innerHTML = '';
+    const date = getActiveDate();
+
     const data = dataManager.getData();
 
     const precipitation = createElement('div', 'other-item');
@@ -353,7 +355,7 @@ function otherWeatherEle(date) {
     humidityText.textContent = `${data.getDayHumidity(date)}`;
 
     windSpeedSvg.innerHTML = iconsSvg.wind;
-    windSpeedText.textContent = `${data.getDayWindSpeed(date)}`;
+    windSpeedText.textContent = `${data.getDayWindSpeed(date).toFixed(1)} km/h`;
 
     append(precipitation, precipitationDescText);
     append(precipitation, precipitationSvg);
@@ -402,7 +404,7 @@ function swipeRight() {
     const currHour = hours[indexCount];
     // currHour.className = 'active';
 
-    console.log('indexCount:', indexCount);
+    // console.log('indexCount:', indexCount);
     if (indexCount === hours.length - 3) {
         indexCount = 0;
         hours.forEach((h) => h.classList.remove('hide'));
@@ -417,7 +419,7 @@ function swipeLeft() {
     indexCount--;
     // currHour.className = 'active';
 
-    console.log('indexCount:', indexCount);
+    // console.log('indexCount:', indexCount);
     if (indexCount < 0) {
         indexCount = 0;
         return;
@@ -434,21 +436,8 @@ function resetTimer() {
     }, 4000);
 }
 
-
-
-
 const getBgImage = async (condition) => {
-    console.log(condition);
+    // console.log(condition);
     const image = await import(`../assets/images/${condition}.jpg`);
     return image.default;
 };
-// const setAttributesColor = (icon) => {
-//   const colors = colorMap[icon] || { text: '#333', bg: '', shadow: '' };
-
-//   document.documentElement.style.setProperty('--text-color', colors.text);
-//   if (colors.bg) document.documentElement.style.setProperty('--bg-color', colors.bg);
-//   if (colors.shadow) document.documentElement.style.setProperty('--shadow-color', colors.shadow);
-
-//   return colors;
-// };
-

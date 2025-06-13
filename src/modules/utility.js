@@ -17,4 +17,15 @@ export function svgParser(string) {
     const element = parser.parseFromString(string, 'image/svg+xml');
     return element.documentElement;
 }
+let celsius = false;
+export const tempCategory = {
+    isCelsius: () => celsius,
+    change: () => celsius = !celsius
+}
 
+export function showLoading(){
+    selector('.loading-overlay').classList.remove('hide')
+}
+export function hideLoading(){
+    selector('.loading-overlay').classList.add('hide')
+}
