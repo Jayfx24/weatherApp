@@ -163,6 +163,11 @@ export function processData(data) {
             const temp = getTempUtility(dateObj, hour);
             return checkCelsius(temp);
         },
+        getHourFeels(date, hour) {
+            const dateObj = findDateObj(date);
+            const temp = dateObj ? dateObj.hours[hour].feelslike : null;
+            return checkCelsius(temp);
+        },
         getHourHumidity(date, hour) {
             const dateObj = findDateObj(date);
             return dateObj ? dateObj.hours[hour].humidity : null;

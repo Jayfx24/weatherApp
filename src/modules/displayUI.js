@@ -1,18 +1,18 @@
 import {
     format,
     parseISO,
-    isToday,
-    isTomorrow,
-    differenceInMinutes,
 } from 'date-fns';
 import {
     selector,
-    selectorAll,
     createElement,
     append,
     svgParser,
-    showLoading,
-    hideLoading,
+    getBgImage,
+    getSvgIcon,
+    friendlyDate,
+    formattedHour,
+    
+   
 } from './utility';
 
 import { getActiveDate } from './indexTracker';
@@ -23,14 +23,10 @@ import { dataManager } from './dataManager';
 
 export const components = {
     form: createElement('form'),
-    label: createElement('label', '', 'Enter Location', ''),
     input: createElement('input', '', '', 'location'),
     inputWrapper: createElement('div', 'input-wrapper'),
-
     btn: createElement('button', '', 'Check Location'),
     spanError: createElement('span', 'error', '', 'locError'),
-    rightSvg: createElement('div', 'right-svg'),
-    leftSvg: createElement('div', 'left-svg'),
     inputSvg: createElement('button', 'input-svg'),
     changeTemp: createElement('div', 'change-temp'),
 };
@@ -48,15 +44,11 @@ export const elements = {
     sideHeader: selector('.side-header'),
 };
 
-// components.changeTemp.innerHTML = `<button>°C</button> <button>°F</button>  `
 components.inputSvg.innerHTML = iconsSvg.search;
 components.inputSvg.type = 'submit';
-components.label.setAttribute('for', 'location');
 components.input.setAttribute('name', 'location');
 components.input.setAttribute('placeholder', 'Search location');
 
-let indexCount = 0;
-let startTimer;
 export function renderUi() {
     const activeDate = getActiveDate();
     const data = dataManager.getData();
@@ -67,7 +59,6 @@ export function renderUi() {
     append(components.inputWrapper, components.inputSvg);
     append(components.inputWrapper, components.input);
     append(components.form, components.inputWrapper);
-    // append(components.form, components.btn);
     append(components.form, components.spanError);
     append(elements.formDiv, components.form);
 
@@ -75,38 +66,25 @@ export function renderUi() {
     renderHourly();
     otherWeatherEle();
     renderCurrentWeek();
-    // hideLoading()
-
-    // resetTimer();
 }
 
 export function renderDayInfo() {
     elements.currentInfo.innerHTML = '';
     const activeDate = getActiveDate();
-
     const data = dataManager.getData();
-
     const currentIcon = data.getDayIconDesc(activeDate);
-    // const currentWeatherDiv = createElement('div', 'current-weather');
     const currentWeatherSvg = createElement('div', 'curr-weather-svg');
     const currentWeatherTexts = createElement('div', 'current-weather-txt');
-    const currHumiditySvg = createElement('div', 'current-svg');
-    // const currHumidityText = createElement(
-    //     'div',
-    //     'current-txt',
-    //     data.getDayHumidity(activeDate),
-    // );
-
     const currentCondition = createElement(
         'p',
-        'curr-Desc',
+        'curr-desc',
         `${data.getDayCondition(activeDate)}`,
     );
 
     const date = parseISO(data.getDayDate(activeDate));
     const currDate = createElement(
         'p',
-        'curr-Date',
+        'curr-date',
         `${format(date, 'EEE, MMM dd yyyy')}`,
     );
     // console.log(data.getDayDate(activeDate));
@@ -118,28 +96,20 @@ export function renderDayInfo() {
 
     const currLocation = createElement(
         'h2',
-        'curr-temp',
+        'curr-loc',
         `${data.fullLocation}`,
     );
 
-    const currHumidity = createElement('span', 'curr-humidity');
+    
 
     currentWeatherSvg.innerHTML = getSvgIcon(currentIcon);
-
-    currHumiditySvg.innerHTML = iconsSvg.humidity;
-    // console.log(currentIcon);
-    // append(currHumidity, currHumiditySvg)
-    // append(currHumidity,currHumidityText)
-
     append(elements.currentInfo, currentWeatherSvg);
     append(elements.currentInfo, currentWeatherTexts);
     append(currentWeatherTexts, currLocation);
     append(currentWeatherTexts, currDate);
     append(currentWeatherTexts, currentTemp);
     append(currentWeatherTexts, currentCondition);
-    append(currentWeatherTexts, currHumidity);
-    // append(currentWeatherTexts, currentCondition);
-    // append(elements.currentInfo, currentWeatherDiv);
+   
 }
 // i need an activeDate count for this
 
@@ -159,7 +129,7 @@ export function renderHourly() {
         const heading = createElement('div', 'hourly-heading');
         const time = createElement('h3', 'hourly-time');
         const svgBox = createElement('div', 'hourly-svg');
-        const degree = createElement('p', 'hourly-degree');
+        const temp = createElement('p', 'hourly-temp');
         const feels = createElement('p', 'hourly-feels');
         const condition = createElement('p', 'hourly-condition');
         const precip = createElement('p', 'hourly-precip');
@@ -170,9 +140,9 @@ export function renderHourly() {
         const datetime = new Date(`${activeDate}T${hour}`);
 
         svgBox.innerHTML = getSvgIcon(element.icon);
-        // console.log(element);
-        degree.textContent = data.getHourTemp(activeDate, hourIndex);
-        feels.textContent = `Feels like ${element.feelslike}`;
+        temp.textContent = data.getHourTemp(activeDate, hourIndex);
+        feels.textContent = `Feels like ${data.getHourFeels(activeDate, hourIndex)}`;
+        
         condition.textContent = element.conditions;
         time.textContent = formattedHour(
             element.datetimeEpoch * 1000,
@@ -181,39 +151,23 @@ export function renderHourly() {
         precip.textContent = `${Math.round(element.precipprob)}% chance of rain`;
 
         time.classList.add('hour-item');
+        box.setAttribute('data-weather',element.icon);
         svgBox.classList.add('hour-item');
-        degree.classList.add('hour-item');
+        temp.classList.add('hour-item');
         feels.classList.add('hour-item');
         condition.classList.add('hour-item');
         precip.classList.add('hour-item');
 
         append(box, time);
         append(box, svgBox);
-        // append(box, heading);
-        append(box, degree);
+        append(box, temp);
+        append(box, condition);
         append(box, feels);
-        // append(box, condition);
         append(box, precip);
 
         append(elements.hourly, box);
     });
 
-    components.rightSvg.innerHTML = iconsSvg.right;
-    components.leftSvg.innerHTML = iconsSvg.left;
-
-    append(elements.hourly, components.rightSvg);
-    append(elements.hourly, components.leftSvg);
-
-    components.rightSvg.addEventListener('click', () => {
-        // resetTimer();
-        swipeRight();
-    });
-    components.leftSvg.addEventListener('click', () => {
-        // resetTimer();
-        swipeLeft;
-    });
-
-    // swipeRight();
 }
 
 function renderCurrentWeek() {
@@ -238,66 +192,16 @@ function renderCurrentWeek() {
         append(button, icon);
         append(button, buttonDate);
         append(elements.navPeriod, button);
-        indexCount = 0;
+       
     });
 }
 
-function getSvgIcon(currentIcon) {
-    if (iconsSvg[currentIcon]) {
-        return iconsSvg[currentIcon];
-    } else {
-        switch (currentIcon) {
-            case 'clear-day':
-                return iconsSvg.clearSky;
 
-            case 'clear-night':
-                return iconsSvg.clearNight;
-
-            case 'partly-cloudy-day':
-                return iconsSvg.partlyCloudy;
-
-            case 'partly-cloudy-night':
-                return iconsSvg.partlyCloudyNight;
-
-            case 'thunder-rain':
-                return iconsSvg.rain;
-            case 'thunder-shower-day':
-                return iconsSvg.thunderDay;
-            default:
-                return iconsSvg.cloudy;
-        }
-    }
-}
 // reminder: if icon type not found use loading icon
 
-function renderHourBg(currentIcon) {
-    switch (currentIcon) {
-        case 'clear-day':
-            return 'linear-gradient(to bottom, #fceabb, #f8b500)';
 
-        // case 'clear-night':
-        //     return iconsSvg.clearNight;
-
-        case 'partly-cloudy-day':
-            return 'linear-gradient(to bottom, #d3cce3, #e9e4f0);';
-
-        case 'rain':
-            return 'linear-gradient(to bottom, #4b79a1, #283e51);';
-
-        case 'snow':
-            return 'linear-gradient(to bottom, #e6dada, #274046)';
-        case 'cloudy':
-            return 'linear-gradient(to bottom, #bdc3c7, #2c3e50)';
-        default:
-            return iconsSvg.cloudy;
-    }
-}
 // CHANGE FROM INDEX TO DATE
-function friendlyDate(date) {
-    if (isToday(date)) return 'Today';
-    if (isTomorrow(date)) return 'Tomorrow';
-    return format(date, 'EEE, MMM dd');
-}
+
 
 function otherWeatherEle() {
     elements.otherInfo.innerHTML = '';
@@ -311,13 +215,13 @@ function otherWeatherEle() {
     const precipitationDescText = createElement(
         'p',
         'item-name',
-        'Precipitation',
+        'Precip.',
     );
 
     const uvIndex = createElement('div', 'other-item');
     const uvIndexSvg = createElement('div', 'uv-svg');
     const uvIndexText = createElement('p', 'item-value');
-    const uvIndexDescText = createElement('p', 'item-name', 'uvIndex');
+    const uvIndexDescText = createElement('p', 'item-name', 'uv index');
 
     const sunrise = createElement('div', 'other-item');
     const sunriseSvg = createElement('div', 'sunrise-svg');
@@ -337,7 +241,7 @@ function otherWeatherEle() {
     const windSpeed = createElement('div', 'other-item');
     const windSpeedSvg = createElement('div', 'wind-svg');
     const windSpeedText = createElement('p', 'item-value');
-    const windSpeedDescText = createElement('p', 'item-name', 'windSpeed');
+    const windSpeedDescText = createElement('p', 'item-name', 'wind');
 
     precipitationSvg.innerHTML = iconsSvg.precip;
     precipitationText.textContent = `${data.getDayPrecip(date)}%`;
@@ -389,55 +293,3 @@ function otherWeatherEle() {
     append(elements.otherInfo, uvIndex);
 }
 
-const formattedHour = (dateToFormat, hour) => {
-    const now = new Date();
-    const diff = differenceInMinutes(now, dateToFormat);
-
-    if (diff >= 0 && diff <= 60) {
-        return 'now';
-    }
-    return format(hour, 'h a');
-};
-
-function swipeRight() {
-    const hours = document.querySelectorAll('.hourly-card');
-    const currHour = hours[indexCount];
-    // currHour.className = 'active';
-
-    // console.log('indexCount:', indexCount);
-    if (indexCount === hours.length - 3) {
-        indexCount = 0;
-        hours.forEach((h) => h.classList.remove('hide'));
-    } else {
-        currHour.classList.add('hide');
-
-        indexCount++;
-    }
-}
-
-function swipeLeft() {
-    indexCount--;
-    // currHour.className = 'active';
-
-    // console.log('indexCount:', indexCount);
-    if (indexCount < 0) {
-        indexCount = 0;
-        return;
-    }
-    const hours = document.querySelectorAll('.hourly-card');
-    const currHour = hours[indexCount];
-    currHour.classList.remove('hide');
-}
-function resetTimer() {
-    clearInterval(startTimer);
-
-    startTimer = setInterval(() => {
-        swipeRight();
-    }, 4000);
-}
-
-const getBgImage = async (condition) => {
-    // console.log(condition);
-    const image = await import(`../assets/images/${condition}.jpg`);
-    return image.default;
-};

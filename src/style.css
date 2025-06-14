@@ -42,7 +42,8 @@ body {
   /* background-image: url('./assets/images/rain.jpg'); */
   background-attachment:fixed ;
   min-height: 100%;
-
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  
 }
 
 body::before {
@@ -50,7 +51,6 @@ body::before {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.3);
-  /* adjustable */
   z-index: -1;
 
 }
@@ -105,7 +105,7 @@ header {
 }
 
 .wrapper {
-  max-width: 770px;
+  max-width: 800px;
 
   margin-inline: auto;
   display: flex;
@@ -113,9 +113,6 @@ header {
   /* justify-content: center; */
   gap: .5rem;
   padding: 1rem 2rem;
-  /* border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 4px 4px 30px rgba(255, 255, 255, 0.2);
-  border-radius: 10px; */
 
 
 }
@@ -129,15 +126,14 @@ header {
 .current-info {
   display: flex;
   width: 100%;
-  /* max-height: 50%; */
-  /* background-color:  #dbeafe; */
-  /* background-color: transparent; */
   border: 1px solid rgba(255, 255, 255, 0.3);
 
   box-shadow: 4px 4px 30px rgba(255, 255, 255, 0.4);
   /* align-items: center; */
-  padding: .5rem 0;
+  padding: .5rem ;
   border-radius: 10px;
+  backdrop-filter: blur(9px);
+  background-color: var(--bg);
 
 }
 
@@ -164,35 +160,37 @@ header {
   gap: 0.5rem;
   justify-content: center;
   font-size: var(--font-xx);
-  font-weight: 400;
+  /* font-weight: 400; */
   /* text-align: end; */
   color: var(--text-color);
+  padding: 1rem;
 
 }
 
 .curr-temp {
   font-size: var(--font-xxx);
-  font-weight: 800;
+  font-weight: 300;
   /* align-self: flex-start; */
   /* text-align: center; */
 
 }
 
-/* .curr-humidity {
-  display: flex;
-  align-items: center;
-  font-size: 1.5rem;
-} */
+.curr-loc{
+    font-weight: 300;
+}
 
-/* .current-svg svg {
-  width: 30px;
-} */
+
+.curr-date,.curr-desc{
+  font-weight: 300;
+  font-size: .9rem;
+}
+
 
 .hourly {
 
   display: grid;
   /* flex-wrap: wrap; */
-  grid-template-columns: repeat(auto-fit, minmax(170px,0.5fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px,1fr));
   /* overflow-x: hidden; */
   width: 100%;
   /* flex: 1; */
@@ -204,9 +202,8 @@ header {
 
 .hourly-card {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.25rem;
   width:100%;
-  min-width: 120px;
   height: 100%;
   flex-shrink: 0;
   border: 1px solid var(--bg);
@@ -216,25 +213,21 @@ header {
   text-transform: capitalize;
   justify-content: center;
   border-radius: 1.4rem;
-  /* background-color: rgba(255, 255, 255, 0.2); */
   /* box-shadow: 3px 4px 3px rgba(255, 255, 255, .5); */
   /* backdrop-filter: blur(10px); */
-  box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 1rem;
   backdrop-filter: blur(12px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  /* background: linear-gradient(to bottom, #fceabb, #f8b500);
-  background: linear-gradient(to bottom, #d3cce3, #e9e4f0); */
-  /* background: linear-gradient(to bottom, #bdc3c7, #2c3e50); */
-  /* background: linear-gradient(to bottom, #4b79a1, #283e51); */
-  /* background: linear-gradient(to top, #e6dada, #274046); */
-
-
-
+  
+  
+  
+  
+  
 }
 
 .hourly-card:hover {
+  box-shadow: 0 4px 30px rgba(255, 255, 255, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.1);
   transform: translateY(-4px);
   box-shadow:
     0 12px 30px rgba(0, 0, 0, 0.2),
@@ -249,15 +242,29 @@ header {
 
 .hourly-svg {
   display: block;
-  width: 100px;
-  /* height: auto; */
+  width: 100%;
+ 
 }
 
+.hourly-temp{
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+.hourly-feels,.hourly-precip{
+  font-size: .7rem;
+  color:rgba(255, 255, 255, 0.8);
+}
+
+.hourly-condition{
+  font-size: .7rem;
+  font-weight: 600;
+}
 .other-info {
   /* display: flex;
   flex-wrap: wrap; */
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(100px, 14%));
+  grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
   gap: .5rem;
   justify-content: space-between;
 }
@@ -275,9 +282,10 @@ header {
   box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1),
     0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
   transition: all 0.3s ease-in-out;
   background-color: rgba(0, 0, 0, 0.2);
+  font-size: 0.8rem;
 
 
 }
@@ -291,6 +299,10 @@ header {
   /* color:red; */
   text-transform: capitalize;
   /* letter-spacing: 1px; */
+}
+
+.item-value{
+  font-weight: 800;
 }
 
 form {
@@ -380,7 +392,7 @@ input:active {
 
 .nav-period {
   display: flex;
-  gap: 1rem;
+  /* gap: 0.5rem; */
   flex-wrap: wrap;
   justify-content: space-evenly;
   /* background: rgba(255, 255, 255, 0.05); */
@@ -389,16 +401,20 @@ input:active {
 
 .nav-item {
   background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.2);
+
   color: var(--color);
-  border: none;
+  border: 1px solid var(--bg);
+ 
   outline: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   height: fit-content;
-  padding-block: .5rem;
+  padding: .5rem .75rem;
   font-size: 1rem;
   color: var(--text-color);
+  border-radius: 1rem;
 
 
 }
@@ -409,7 +425,7 @@ input:active {
 }
 
 .nav-item:hover {
-  border-bottom: 2px solid navajowhite;
+  border-bottom: 2px solid white;
 
 
 }
@@ -430,6 +446,8 @@ input:active {
   border:1px solid white;
   border-radius: 4px;
   transition: all 0.3s ease-in-out;
+  box-shadow: 4px 4px 30px rgba(255, 255, 255, 0.4);
+
 
 }
 
@@ -475,6 +493,7 @@ input:active {
   display: none;
 }
 
+
 /* Photo by <a href="https://unsplash.com/@gregjeanneau?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Gregoire Jeanneau</a> on <a href="https://unsplash.com/photos/starry-night-wallpaper-9sxeKzuCVoE?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
        */
 
@@ -493,3 +512,10 @@ input:active {
        */
 /* Photo by <a href="https://unsplash.com/@inayali?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Ali Inay</a> on <a href="https://unsplash.com/photos/dirt-road-cover-by-snow-yNaGxHqjOuw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
        */
+
+/* @media (max-width:770px) {
+  .wrapper{
+    width: 100%;
+  }
+  
+} */

@@ -14,23 +14,22 @@ import { dataManager } from './modules/dataManager';
 import { tempCategory, showLoading, hideLoading } from './modules/utility';
 import { getUserServerLocation } from './modules/defaultLocation';
 
-dataManager.setData(processData(testData));
+// dataManager.setData(processData(testData));
 
 async function app() {
     showLoading();
     setActiveDate(today());
-    // const ipLoc = await getUserServerLocation();
-    // const requestLocation = ipLoc ? `${ipLoc.city}, ${ipLoc.country}`: "New York";
+    const ipLoc = await getUserServerLocation();
+    const requestLocation = ipLoc ? `${ipLoc.city}, ${ipLoc.country}`: "New York";
 
-    // const requestData = await requestWeatherData(requestLocation);
-    // const data = processData(requestData);
+    const requestData = await requestWeatherData(requestLocation);
+    const data = processData(requestData);
 
-    // console.log(requestData);
-    // if (data) dataManager.setData(data);
+    console.log(requestData);
+    if (data) dataManager.setData(data);
     renderUi();
-    
-    setTimeout(hideLoading, 500);
 
+    setTimeout(hideLoading, 500);
 
     // elements.navPeriod.addEventListener('mouseover',renderSelectedBtn);
     elements.navPeriod.addEventListener('click', renderSelectedBtn);
@@ -74,20 +73,16 @@ async function getFormData(e) {
 app();
 
 function changeTempType(e) {
-    const target = e.target.closest('button');
+    const target = e.target.closest('.side-btn');
 
     if (!target) return;
-    document
-        .querySelectorAll('.side-btn')
-        .forEach((el) => el.classList.remove('active-temp'));
-    target.classList.add('active-temp');
+    const isCelsius = tempCategory.isCelsius();
+    target.textContent = isCelsius ? '°C' : '°F';
     tempCategory.change();
-    const value = target.textContent === '°F' ? '°C' : '°F';
-    target.textContent = value;
+    
     renderDayInfo();
     renderHourly();
 }
-
 
 // FIX ERROR FOR INVALID API REQUEST DONE
 // ADD FORM ERRORS DONE
@@ -99,5 +94,7 @@ function changeTempType(e) {
 // IMPROVE UI AND AND EFFECTS done
 
 // ADD BUTTON FOR CHANGING DEGREE
-// style button and add loading screen
-// FIGURE OUT USER LOCAL NETWORK API AND ADD WAIT LOADING SCREEN
+// style button and add loading screen DONE
+// FIGURE OUT USER LOCAL NETWORK API AND ADD WAIT LOADING SCREEN DONE
+// FIX TEMP BUTTON BUG
+// CONSIDER ADDING BOX-S TO NAV BTNS

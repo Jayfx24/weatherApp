@@ -1,4 +1,4 @@
-const rainSvg = `<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512">
+const rainSvg = `<svg xmlns="http://www.w3.org/2000/svg"  viewBox="50 50 412 412">
   <defs>
     <linearGradient id="meteoconsDrizzleFill0" x1="99.5" x2="232.6" y1="30.7" y2="261.4" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#fff"/>
