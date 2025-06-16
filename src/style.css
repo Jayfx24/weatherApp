@@ -1,3 +1,5 @@
+
+
 :root {
   --border: 1px solid red;
   --font-x: 1rem;
@@ -39,11 +41,10 @@ body {
 
   background-repeat: no-repeat;
 
-  /* background-image: url('./assets/images/rain.jpg'); */
   background-attachment:fixed ;
   min-height: 100%;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  
+
 }
 
 body::before {
@@ -110,7 +111,6 @@ header {
   margin-inline: auto;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   gap: .5rem;
   padding: 1rem 2rem;
 
@@ -118,18 +118,14 @@ header {
 }
 
 .wrapper>* {
-
   width: 100%;
-
 }
 
 .current-info {
   display: flex;
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.3);
-
   box-shadow: 4px 4px 30px rgba(255, 255, 255, 0.4);
-  /* align-items: center; */
   padding: .5rem ;
   border-radius: 10px;
   backdrop-filter: blur(9px);
@@ -137,15 +133,10 @@ header {
 
 }
 
-/* .content>* {
-  flex: 1
-} */
 
 .current-info>* {
   flex: 1
 }
-
-.curr-weather-svg {}
 
 .curr-weather-svg svg {
   max-width: 100%;
@@ -170,8 +161,7 @@ header {
 .curr-temp {
   font-size: var(--font-xxx);
   font-weight: 300;
-  /* align-self: flex-start; */
-  /* text-align: center; */
+  
 
 }
 
@@ -392,9 +382,9 @@ input:active {
 
 .nav-period {
   display: flex;
-  /* gap: 0.5rem; */
+  gap: 0.5rem;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  /* justify-content: space-evenly; */
   /* background: rgba(255, 255, 255, 0.05); */
 
 }
@@ -492,30 +482,3 @@ input:active {
 .hide {
   display: none;
 }
-
-
-/* Photo by <a href="https://unsplash.com/@gregjeanneau?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Gregoire Jeanneau</a> on <a href="https://unsplash.com/photos/starry-night-wallpaper-9sxeKzuCVoE?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
-       */
-
-/* Photo by <a href="https://unsplash.com/@iamthedave?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Dave Hoefler</a> on <a href="https://unsplash.com/photos/blue-ocean-photography-ELXbHhzVFO0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
-       */
-
-/* Photo by <a href="https://unsplash.com/@sebbas?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Sebastian Barschkis</a> on <a href="https://unsplash.com/photos/blue-sky-sB3EGMv-JvA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
-       */
-/* Photo by <a href="https://unsplash.com/@dannyeve?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Daoudi Aissa</a> on <a href="https://unsplash.com/photos/cumulus-clouds-Pe1Ol9oLc4o?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
-       */
-/* Photo by <a href="https://unsplash.com/@mahkeo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Khamkéo</a> on <a href="https://unsplash.com/photos/trees-with-wind-photo-WtwSsqwYlA0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
-       */
-/* Photo by <a href="https://unsplash.com/@pueblovista?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Paul Pastourmatzis</a> on <a href="https://unsplash.com/photos/silhouette-of-trees-covered-by-fog-KT3WlrL_bsg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
-       */
-/* Photo by <a href="https://unsplash.com/@r_shayesrehpour?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">reza shayestehpour</a> on <a href="https://unsplash.com/photos/grayscale-photography-of-raindrops-Nw_D8v79PM4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
-       */
-/* Photo by <a href="https://unsplash.com/@inayali?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Ali Inay</a> on <a href="https://unsplash.com/photos/dirt-road-cover-by-snow-yNaGxHqjOuw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
-       */
-
-/* @media (max-width:770px) {
-  .wrapper{
-    width: 100%;
-  }
-  
-} */

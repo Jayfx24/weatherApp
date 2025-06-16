@@ -20,12 +20,14 @@ async function app() {
     showLoading();
     setActiveDate(today());
     const ipLoc = await getUserServerLocation();
-    const requestLocation = ipLoc ? `${ipLoc.city}, ${ipLoc.country}`: "New York";
+    const requestLocation = ipLoc
+        ? `${ipLoc.city}, ${ipLoc.country}`
+        : 'New York';
 
     const requestData = await requestWeatherData(requestLocation);
     const data = processData(requestData);
 
-    console.log(requestData);
+    // console.log(requestData);
     if (data) dataManager.setData(data);
     renderUi();
 
@@ -41,9 +43,9 @@ function renderSelectedBtn(e) {
     const target = e.target.closest('button');
 
     if (!target || !elements.navPeriod.contains(target)) return;
-    const id = target.getAttribute('data-date');
-    setActiveDate(id);
-    console.log(`changing Active Date to ${id}`);
+    const dataDate = target.getAttribute('data-date');
+    setActiveDate(dataDate);
+    // console.log(`changing Active Date to ${id}`);
 
     renderUi();
 }
@@ -79,7 +81,7 @@ function changeTempType(e) {
     const isCelsius = tempCategory.isCelsius();
     target.textContent = isCelsius ? '°C' : '°F';
     tempCategory.change();
-    
+
     renderDayInfo();
     renderHourly();
 }
@@ -93,8 +95,13 @@ function changeTempType(e) {
 // SET DEFINED WIDTH TO HOUR CARD
 // IMPROVE UI AND AND EFFECTS done
 
-// ADD BUTTON FOR CHANGING DEGREE
+// ADD BUTTON FOR CHANGING TEMP
 // style button and add loading screen DONE
 // FIGURE OUT USER LOCAL NETWORK API AND ADD WAIT LOADING SCREEN DONE
-// FIX TEMP BUTTON BUG
-// CONSIDER ADDING BOX-S TO NAV BTNS
+// FIX TEMP BUTTON BUG DONE
+// CONSIDER ADDING BOX-S TO NAV BTNS DONE
+// add credits
+
+window.addEventListener("DOMContentLoaded", () => {
+  document.body.style.visibility = "visible";
+});
